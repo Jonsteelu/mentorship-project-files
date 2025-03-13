@@ -4,7 +4,7 @@ from tkinter import messagebox, filedialog
 import fnmatch
 
 def run_command(folder_path):
-    # Full path to sigcheck.exe
+    # Full path to sigcheck.exe, This may need to change dependant on if sigcheck is going to be donwloaded directly into the application package
     command = f'C:\\Users\\Jostrovski\\Downloads\\Sigcheck\\sigcheck.exe -vt "{folder_path}"'
     
     # Run the command
@@ -26,7 +26,7 @@ def run_command(folder_path):
 
     for line in output_lines:
         # Capture the relevant information
-        if fnmatch.fnmatch(line, "?:\\*"):  # Match any drive letter
+        if fnmatch.fnmatch(line, "?:\\*"):  # Match any drive letter that the user chooses
             file_name_path = line.strip()
         
         if "File date:" in line:
@@ -36,7 +36,7 @@ def run_command(folder_path):
             vt_detection = line.split(":", 1)[1].strip()
             # Check if the detection is 'Unknown'
             if vt_detection.lower() == 'unknown':
-                continue  # Skip processing if it's unknown
+                continue  # Skip processing that files VT detection if it's unknown
 
             detection_numbers = vt_detection.split('/')
             if detection_numbers and len(detection_numbers[0].strip()) > 0:
@@ -45,6 +45,7 @@ def run_command(folder_path):
                 # Check if the detected count is a digit
                 if detected_count_str.isdigit():
                     detected_count = int(detected_count_str)
+                    # if it is then check if it is greater than zero meaning that there is a virus detected on the file 
                     if detected_count > 0:
                         all_no_viruses = False  # Found a virus
                         infected_files.append(file_name_path)  # Add the file to the list
@@ -72,9 +73,10 @@ def run_command(folder_path):
         infected_files_str = "\n".join(infected_files)
         result_message = f"Virus detected in the following file(s):\n{infected_files_str}"
 
-    # Use after method to display the message box after a slight delay
-    root.after(100, lambda: messagebox.showinfo("Scan Result", result_message))
+    #display the message box with the scan results
+    messagebox.showinfo("Scan Result", result_message)
 
+#after running once allow the user to reselect the folder to restart the test
 def select_folder():
     folder_path = filedialog.askdirectory()  # Open folder selection dialog
     if folder_path:  # If a folder was selected
