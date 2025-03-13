@@ -5,7 +5,7 @@ import fnmatch
 
 def run_command(folder_path):
     # Full path to sigcheck.exe, This may need to change dependant on if sigcheck is going to be donwloaded directly into the application package
-    command = f'C:\\Users\\Jostrovski\\Downloads\\Sigcheck\\sigcheck.exe -vt "{folder_path}"'
+    command = f"{r'D:\Mentorship\Sigcheck\sigcheck.exe'} -vt \"{folder_path}\""
     
     # Run the command
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
